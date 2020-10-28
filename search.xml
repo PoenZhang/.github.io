@@ -4,13 +4,48 @@
   
     
     <entry>
-      <title>Hello World</title>
-      <link href="2020/10/27/hello-world/"/>
-      <url>2020/10/27/hello-world/</url>
+      <title>我的个人博客</title>
+      <link href="2020/10/28/first/"/>
+      <url>2020/10/28/first/</url>
       
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+        <content type="html"><![CDATA[<p>欢迎大家来到我的个人博客，让我们一起学习一起进步。</p><a id="more"></a><p>我将在此更新包括但不限于：编码，设计，数据库，随笔类型的内容；如果有想和我探讨的内容，请返回首页查找合适的联系方式联系我吧。</p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> keep learning </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>限流算法解析</title>
+      <link href="2020/10/28/current-limiting-algorithm/"/>
+      <url>2020/10/28/current-limiting-algorithm/</url>
+      
+        <content type="html"><![CDATA[<p>引言：盘点一下常用的几种限流算法的原理与实现。</p><a id="more"></a><h2 id="1、固定时间窗口限流"><a href="#1、固定时间窗口限流" class="headerlink" title="1、固定时间窗口限流"></a>1、固定时间窗口限流</h2><p>​        固定时间窗口限流很好理解，就是使用计数器在周期内累加访问次数，当请求次数达到设定的限流值时，触发限流策略。下一个周期开始时，将计数器清零，重新计数。这种算法是限流算法中最简单的一种，无论理解还是实现。<strong>我们可以使用Redis的incr原子自增和线程安全实现</strong></p><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599120998722-dc689c17-7cc4-4b7b-ac4b-b1409ca2e224.png" alt="image.png"></p><p>​        这个算法通常用于QPS限流和统计访问总量，但对于限制粒度较大的情况下会有比较严重的临界问题：当上一个周期的100次请求在最后10ms内抵达，当前周期的100个请求在本秒的开头10ms内抵达，我们放大到周期来看，每个周期都只有100的请求量，未触发我们的限流策略，但是缩小到上个周期的最后10ms和本周期的开头10ms来看，服务器在20ms内接收到了200个请求，这个请求量超出了我们设定的限流数量，但却没有触发限流策略。</p><p>由此可见，固定时间窗口限流算法，对于粒度较大的限流周期来说，有很大的弊端。</p><h2 id="2、滑动时间窗口限流"><a href="#2、滑动时间窗口限流" class="headerlink" title="2、滑动时间窗口限流"></a>2、滑动时间窗口限流</h2><p>​        第二种是滑动时间窗口限流算法，这种算法将时间周期分为N个小周期，分别记录每个小周期内的访问次数，并且根据时间删除过期周期访问次数的记录。</p><p>如图，假设将时间周期设置为1min，我们可以将1min再划分为2个小周期，统计每个小周期内的访问次数，则可以看到，第一个周期的访问次数为75，第二个周期超过了我们限制的100，则会触发限流策略</p><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599121613919-72d66c69-5832-495a-b604-0eb8260e7e76.png" alt="image.png"></p><p>由此可见，当滑动窗口划分的格子越细致，那么滑动窗口的滚动就会越平滑，限流的统计就会越精确。</p><h2 id="3、令牌桶限流"><a href="#3、令牌桶限流" class="headerlink" title="3、令牌桶限流"></a>3、令牌桶限流</h2><p>​        令牌桶也比较简单，是以程序以一个固定的速度S（S=时间周期/限流值）向令牌桶中增加令牌，直至令牌桶满，请求到达时先到令牌桶中请求令牌，获取到令牌则通过请求，否则触发限流</p><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599122374364-3bb91b33-8cdb-4dcc-b574-4a965e5f8b4d.png" alt="img"></p><h2 id="4、漏桶限流"><a href="#4、漏桶限流" class="headerlink" title="4、漏桶限流"></a>4、漏桶限流</h2><p>​        漏桶限流又被成为漏斗限流，我们将访问请求直接放入漏桶，如当前容量已经达到上限，则直接触发限流。漏桶以固定的速率进行释放访问请求（即允许请求通过），直到漏桶为空。</p><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599122555655-41550a62-f23f-4ba6-90eb-14469639a719.png" alt="img"></p><p>附上java版的实现：</p><pre><code>/** * Created by zhangbw */public class FunnelRateLimiter {    static class Funnel {        int capacity;   //容量        float leakingRate; //速率        int leftQuota;//剩余容量        long leakingTs;//上次漏水的时间        public Funnel(int capacity, float leakingRate) {            this.capacity = capacity;            this.leakingRate = leakingRate;            this.leftQuota = capacity;            this.leakingTs = System.currentTimeMillis();        }        void makeSpace() {            long nowTs = System.currentTimeMillis();            long deltaTs = nowTs - leakingTs;//距离上一次漏水过去了多长时间            int deltaQuota = (int) (deltaTs * leakingRate);//可以腾出多少空间            //间隔时间太长 ，整数数字过大溢出            if (deltaQuota &lt; 0) {                this.leftQuota = capacity;                this.leakingTs = nowTs;                return;            }                //腾出空间太小 ，最小单位是1                if (deltaQuota &lt; 1) {                    return;                }                this.leftQuota += deltaQuota;                this.leakingTs = nowTs;                if (this.leftQuota &gt; this.capacity) {                    this.leftQuota = this.capacity;                }            }        boolean watering(int quota) {            makeSpace();            if (this.leftQuota &gt;= quota) {                this.leftQuota -= quota;                return true;            }            return false;        }        private Map&lt;String, Funnel&gt; funnels = new HashMap&lt;&gt;();        public boolean isActionAllowed(String userId, String actionKey, int capacity, float leakingRate) {            String key = String.format("%s:%s", userId, capacity);            Funnel funnel = funnels.get(key);            if (funnel == null) {                funnel = new Funnel(capacity, leakingRate);                funnels.put(key, funnel);            }            return funnel.watering(1); //需要 1 个 quota        }    }}</code></pre><p>Redis4.0为我们提供了一个限流的Redis模块，叫做<a href="https://github.com/brandur/redis-cell">Redis-Cell</a>，该模块使用了漏斗算法，并提供了原子的限流指令。我们可以直接使用。</p><p>Guava包其实对各种限流策略都有实现，详情可见：<a href="https://guava.dev/releases/19.0/api/docs/index.html?com/google/common/util/concurrent/RateLimiter.html">RateLimiter</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编码与设计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 编码 </tag>
+            
+            <tag> java </tag>
+            
+            <tag> 限流 </tag>
+            
+        </tags>
       
     </entry>
     

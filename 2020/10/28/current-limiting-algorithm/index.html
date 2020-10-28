@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="friends, Keep learning">
+    <meta name="keywords" content="限流算法解析, Keep learning">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>friends | Keep learning</title>
+    <title>限流算法解析 | Keep learning</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -312,12 +312,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">friends</h1>
+                    <h1 class="description center-align post-title">限流算法解析</h1>
                 </div>
             </div>
         </div>
@@ -432,12 +432,33 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%BC%96%E7%A0%81/">
+                                <span class="chip bg-color">编码</span>
+                            </a>
+                        
+                            <a href="/tags/java/">
+                                <span class="chip bg-color">java</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%99%90%E6%B5%81/">
+                                <span class="chip bg-color">限流</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                编码与设计
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -460,14 +481,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    0
+                    988
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    1 Min
+                    3 Min
                 </div>
                 
 
@@ -482,7 +503,87 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <p>引言：盘点一下常用的几种限流算法的原理与实现。</p>
+<a id="more"></a>
+
+<h2 id="1、固定时间窗口限流"><a href="#1、固定时间窗口限流" class="headerlink" title="1、固定时间窗口限流"></a>1、固定时间窗口限流</h2><p>​        固定时间窗口限流很好理解，就是使用计数器在周期内累加访问次数，当请求次数达到设定的限流值时，触发限流策略。下一个周期开始时，将计数器清零，重新计数。这种算法是限流算法中最简单的一种，无论理解还是实现。<strong>我们可以使用Redis的incr原子自增和线程安全实现</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599120998722-dc689c17-7cc4-4b7b-ac4b-b1409ca2e224.png" alt="image.png"></p>
+<p>​        这个算法通常用于QPS限流和统计访问总量，但对于限制粒度较大的情况下会有比较严重的临界问题：当上一个周期的100次请求在最后10ms内抵达，当前周期的100个请求在本秒的开头10ms内抵达，我们放大到周期来看，每个周期都只有100的请求量，未触发我们的限流策略，但是缩小到上个周期的最后10ms和本周期的开头10ms来看，服务器在20ms内接收到了200个请求，这个请求量超出了我们设定的限流数量，但却没有触发限流策略。</p>
+<p>由此可见，固定时间窗口限流算法，对于粒度较大的限流周期来说，有很大的弊端。</p>
+<h2 id="2、滑动时间窗口限流"><a href="#2、滑动时间窗口限流" class="headerlink" title="2、滑动时间窗口限流"></a>2、滑动时间窗口限流</h2><p>​        第二种是滑动时间窗口限流算法，这种算法将时间周期分为N个小周期，分别记录每个小周期内的访问次数，并且根据时间删除过期周期访问次数的记录。</p>
+<p>如图，假设将时间周期设置为1min，我们可以将1min再划分为2个小周期，统计每个小周期内的访问次数，则可以看到，第一个周期的访问次数为75，第二个周期超过了我们限制的100，则会触发限流策略</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599121613919-72d66c69-5832-495a-b604-0eb8260e7e76.png" alt="image.png"></p>
+<p>由此可见，当滑动窗口划分的格子越细致，那么滑动窗口的滚动就会越平滑，限流的统计就会越精确。</p>
+<h2 id="3、令牌桶限流"><a href="#3、令牌桶限流" class="headerlink" title="3、令牌桶限流"></a>3、令牌桶限流</h2><p>​        令牌桶也比较简单，是以程序以一个固定的速度S（S=时间周期/限流值）向令牌桶中增加令牌，直至令牌桶满，请求到达时先到令牌桶中请求令牌，获取到令牌则通过请求，否则触发限流</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599122374364-3bb91b33-8cdb-4dcc-b574-4a965e5f8b4d.png" alt="img"></p>
+<h2 id="4、漏桶限流"><a href="#4、漏桶限流" class="headerlink" title="4、漏桶限流"></a>4、漏桶限流</h2><p>​        漏桶限流又被成为漏斗限流，我们将访问请求直接放入漏桶，如当前容量已经达到上限，则直接触发限流。漏桶以固定的速率进行释放访问请求（即允许请求通过），直到漏桶为空。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1500511/1599122555655-41550a62-f23f-4ba6-90eb-14469639a719.png" alt="img"></p>
+<p>附上java版的实现：</p>
+<pre><code>/**
+ * Created by zhangbw
+ */
+public class FunnelRateLimiter {
+    static class Funnel {
+        int capacity;   //容量
+        float leakingRate; //速率
+        int leftQuota;//剩余容量
+        long leakingTs;//上次漏水的时间
+
+        public Funnel(int capacity, float leakingRate) {
+            this.capacity = capacity;
+            this.leakingRate = leakingRate;
+            this.leftQuota = capacity;
+            this.leakingTs = System.currentTimeMillis();
+        }
+
+        void makeSpace() {
+            long nowTs = System.currentTimeMillis();
+            long deltaTs = nowTs - leakingTs;//距离上一次漏水过去了多长时间
+            int deltaQuota = (int) (deltaTs * leakingRate);//可以腾出多少空间
+            //间隔时间太长 ，整数数字过大溢出
+            if (deltaQuota &lt; 0) {
+                this.leftQuota = capacity;
+                this.leakingTs = nowTs;
+                return;
+            }
+                //腾出空间太小 ，最小单位是1
+                if (deltaQuota &lt; 1) {
+                    return;
+                }
+                this.leftQuota += deltaQuota;
+                this.leakingTs = nowTs;
+                if (this.leftQuota &gt; this.capacity) {
+                    this.leftQuota = this.capacity;
+                }
+            }
+
+        boolean watering(int quota) {
+            makeSpace();
+            if (this.leftQuota &gt;= quota) {
+                this.leftQuota -= quota;
+                return true;
+            }
+            return false;
+        }
+
+        private Map&lt;String, Funnel&gt; funnels = new HashMap&lt;&gt;();
+
+        public boolean isActionAllowed(String userId, String actionKey, int capacity, float leakingRate) {
+            String key = String.format("%s:%s", userId, capacity);
+            Funnel funnel = funnels.get(key);
+            if (funnel == null) {
+                funnel = new Funnel(capacity, leakingRate);
+                funnels.put(key, funnel);
+            }
+            return funnel.watering(1); //需要 1 个 quota
+        }
+    }
+}
+
+</code></pre>
+<p>Redis4.0为我们提供了一个限流的Redis模块，叫做<a target="_blank" rel="noopener" href="https://github.com/brandur/redis-cell">Redis-Cell</a>，该模块使用了漏斗算法，并提供了原子的限流指令。我们可以直接使用。</p>
+<p>Guava包其实对各种限流策略都有实现，详情可见：<a target="_blank" rel="noopener" href="https://guava.dev/releases/19.0/api/docs/index.html?com/google/common/util/concurrent/RateLimiter.html">RateLimiter</a></p>
+
             </div>
             <hr/>
 
@@ -507,7 +608,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://poenzhang.github.io/friends/index.html">https://poenzhang.github.io/friends/index.html</a>
+                    <a href="https://poenzhang.github.io/2020/10/28/current-limiting-algorithm/">https://poenzhang.github.io/2020/10/28/current-limiting-algorithm/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -544,7 +645,19 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
+                            
+                                <a href="/tags/%E7%BC%96%E7%A0%81/">
+                                    <span class="chip bg-color">编码</span>
+                                </a>
+                            
+                                <a href="/tags/java/">
+                                    <span class="chip bg-color">java</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%99%90%E6%B5%81/">
+                                    <span class="chip bg-color">限流</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -710,30 +823,29 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/friends/index.html">
+                <a href="/2020/10/28/first/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="friends">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="我的个人博客">
                         
-                        <span class="card-title">friends</span>
+                        <span class="card-title">我的个人博客</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            欢迎大家来到我的个人博客，让我们一起学习一起进步。
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-28
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-10-28
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -742,7 +854,14 @@
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/keep-learning/">
+                        <span class="chip bg-color">keep learning</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -753,19 +872,19 @@
                 Current&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/friends/index.html">
+                <a href="/2020/10/28/current-limiting-algorithm/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="friends">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="限流算法解析">
                         
-                        <span class="card-title">friends</span>
+                        <span class="card-title">限流算法解析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            引言：盘点一下常用的几种限流算法的原理与实现。
                         
                     </div>
                     <div class="publish-info">
@@ -774,13 +893,33 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Poen Zhang
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                    编码与设计
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%BC%96%E7%A0%81/">
+                        <span class="chip bg-color">编码</span>
+                    </a>
+                    
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%99%90%E6%B5%81/">
+                        <span class="chip bg-color">限流</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
