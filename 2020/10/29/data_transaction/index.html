@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="我的个人博客, Keep learning">
+    <meta name="keywords" content="数据库事务隔离级别, Keep learning">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>我的个人博客 | Keep learning</title>
+    <title>数据库事务隔离级别 | Keep learning</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -312,12 +312,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">我的个人博客</h1>
+                    <h1 class="description center-align post-title">数据库事务隔离级别</h1>
                 </div>
             </div>
         </div>
@@ -434,14 +434,27 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/keep-learning/">
-                                <span class="chip bg-color">keep learning</span>
+                            <a href="/tags/MySQL/">
+                                <span class="chip bg-color">MySQL</span>
+                            </a>
+                        
+                            <a href="/tags/ORACLE/">
+                                <span class="chip bg-color">ORACLE</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                数据库
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -450,28 +463,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-10-28
+                    2020-10-29
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2020-10-28
+                    2020-10-29
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    78
+                    1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    1 Min
+                    3 Min
                 </div>
                 
 
@@ -486,10 +499,62 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>欢迎大家来到我的个人博客，让我们一起学习一起进步。</p>
-<a id="more"></a>
-
-<p>我将在此更新包括但不限于：编码，设计，数据库，随笔类型的内容；如果有想和我探讨的内容，请返回首页查找合适的联系方式联系我吧。</p>
+                <h3 id="什么是事务隔离？"><a href="#什么是事务隔离？" class="headerlink" title="什么是事务隔离？"></a>什么是事务隔离？</h3><p>任何支持事务的数据库，都必须具备四个特性：原子性，一致性，隔离性，永久性，也就是ACID，这样才能保证事务中数据的正确性。</p>
+<p>而事务的隔离性就是指：多个并发的事务同事访问一个数据库时，一个事务不应该被另一个事务所干扰，每个并发的事务都要相互隔离。</p>
+<h3 id="如果没有事务隔离"><a href="#如果没有事务隔离" class="headerlink" title="如果没有事务隔离"></a>如果没有事务隔离</h3><p>如果没有事务隔离的话，会发生什么？</p>
+<p>假设有表T，里边记录了几种语言的记录</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>NAME</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>JavaWeb</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Python</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Go</td>
+</tr>
+</tbody></table>
+<p>（1）事务A访问数据库，向表中插入了一条记录4:C++，但是并没有提交事务</p>
+<p>insert into T values(4,’C++’)；</p>
+<p>这时候，来了一个事务B，要查询表中所有的记录，这是就能查到id为4的C++，这种情况叫做“脏读”</p>
+<p>（2）事务A访问数据库，要按id查询id为1的语言的名字，执行了：</p>
+<pre><code>select * from T where id = 1;</code></pre>
+<p>得到了name为JavaWeb的记录。这时候事务B访问数据库，将id为1的记录的name更新为了JavaEE</p>
+<pre><code>update T set name = 'JavaEE' where id = 1;</code></pre>
+<p>接着事务A还想再看一次id为1的记录的name，发现已经变成了JavaEE，跟第一次的读取数据不同，这就叫做不可重复读。</p>
+<p>（3）事务A访问数据库，想看表中的记录都有什么，于是执行了：</p>
+<pre><code>select * from T;</code></pre>
+<p>这时候，事务B来了，向表中插入了一条新的记录：</p>
+<pre><code>insert into A values(5,'SQL');</code></pre>
+<p>然后事务A想再查看一遍刚才的语言都有哪些，于是把刚才的查询语句又执行了一遍，结果第一次查询有四条，第二次查询有五条。这叫幻读。</p>
+<h3 id="数据库隔离级别"><a href="#数据库隔离级别" class="headerlink" title="数据库隔离级别"></a>数据库隔离级别</h3><p>为了解决以上 脏读，不可重复读，幻读的问题，我们需要根据我们的实际情况来设置数据库的隔离级别：</p>
+<ul>
+<li>读未提交</li>
+<li>读提交</li>
+<li>可重复读</li>
+<li>串行化</li>
+</ul>
+<p>这四种隔离级别对应着三种事务隔离问题，下面看一下具体解释：</p>
+<h4 id="（1）读未提交"><a href="#（1）读未提交" class="headerlink" title="（1）读未提交"></a>（1）读未提交</h4><p>就是可以读到未提交的内容。因此在这种级别下，是不会加锁的，就会导致脏读的情况，当然了，也会出现不可重复读和幻读。</p>
+<h4 id="（2）读提交"><a href="#（2）读提交" class="headerlink" title="（2）读提交"></a>（2）读提交</h4><p>就是只能读到事务已经提交的内容。这是各种系统中最常用的一种隔离级别。包括SQL Server和Oracle。这种隔离级别可以避免脏读。</p>
+<p>这个级别也可以叫做“快照读”，这是按照原理来命名的，即：是事务中的每个 sql 语句生成一个 readView。那就是一个事务内多条 sql 语句，会生成多个 readView。而每条 sql 执行时，都是查询最新 readView 的值，从而查取到别的事务已经提交的数据。</p>
+<p>但是读已提交只能避免脏读，而无法解决不可重复读和幻读。</p>
+<h4 id="（3）可重复读"><a href="#（3）可重复读" class="headerlink" title="（3）可重复读"></a>（3）可重复读</h4><p>专门针对不可重复读的隔离级别，是MySQL的默认隔离级别。</p>
+<p>在这个级别下，普通的查询依然是快照读，但是在事务启动时，就不允许修改（Update）操作了，而不可重复读正是因为两次读取之间出现了数据的修改操作，读取之后就加锁不允许其他事务修改这种操作效率也比较差，而成熟的数据库，出于性能考虑，都是使用了以乐观锁为理论基础的<strong>MVCC（多版本并发控制）</strong>来实现。</p>
+<p>此级别不可避免幻读，因为幻读是由于插入（insert）或者删除（delete）操作产生的。</p>
+<h4 id="（4）串行化"><a href="#（4）串行化" class="headerlink" title="（4）串行化"></a>（4）串行化</h4><p>  这是数据库的最高隔离级别，在这种级别下，事务串行化的顺序执行。但是效率太差，基本不会使用。</p>
+<p><strong>脏读：select问题</strong></p>
+<p><strong>不可重复读：update问题</strong></p>
+<p><strong>幻读：insert/delete问题</strong></p>
 
             </div>
             <hr/>
@@ -505,7 +570,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">Poen Zhang</a>
+                    <a href="/about" rel="external nofollow noreferrer">PoenZhang</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -515,7 +580,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://poenzhang.github.io/2020/10/28/first/">https://poenzhang.github.io/2020/10/28/first/</a>
+                    <a href="https://poenzhang.github.io/2020/10/29/data_transaction/">https://poenzhang.github.io/2020/10/29/data_transaction/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -528,7 +593,7 @@
                     All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     reprint polocy. If reproduced, please indicate source
-                    <a href="/about" target="_blank">Poen Zhang</a>
+                    <a href="/about" target="_blank">PoenZhang</a>
                     !
                 </span>
             </div>
@@ -553,8 +618,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/keep-learning/">
-                                    <span class="chip bg-color">keep learning</span>
+                                <a href="/tags/MySQL/">
+                                    <span class="chip bg-color">MySQL</span>
+                                </a>
+                            
+                                <a href="/tags/ORACLE/">
+                                    <span class="chip bg-color">ORACLE</span>
                                 </a>
                             
                         </div>
@@ -768,9 +837,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/10/29/data_transaction/">
                     <div class="card-image">
@@ -788,9 +858,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-10-29
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-29
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -803,6 +873,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -825,19 +896,19 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/10/28/current-limiting-algorithm/">
+                <a href="/2020/10/28/first/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="限流算法解析">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="我的个人博客">
                         
-                        <span class="card-title">限流算法解析</span>
+                        <span class="card-title">我的个人博客</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            引言：盘点一下常用的几种限流算法的原理与实现。
+                            欢迎大家来到我的个人博客，让我们一起学习一起进步。
                         
                     </div>
                     <div class="publish-info">
@@ -846,12 +917,8 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/" class="post-category">
-                                    编码与设计
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Poen Zhang
                             
                         </span>
                     </div>
@@ -859,16 +926,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%BC%96%E7%A0%81/">
-                        <span class="chip bg-color">编码</span>
-                    </a>
-                    
-                    <a href="/tags/java/">
-                        <span class="chip bg-color">java</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%99%90%E6%B5%81/">
-                        <span class="chip bg-color">限流</span>
+                    <a href="/tags/keep-learning/">
+                        <span class="chip bg-color">keep learning</span>
                     </a>
                     
                 </div>

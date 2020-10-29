@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>数据库事务隔离级别</title>
+      <link href="2020/10/29/data_transaction/"/>
+      <url>2020/10/29/data_transaction/</url>
+      
+        <content type="html"><![CDATA[<h3 id="什么是事务隔离？"><a href="#什么是事务隔离？" class="headerlink" title="什么是事务隔离？"></a>什么是事务隔离？</h3><p>任何支持事务的数据库，都必须具备四个特性：原子性，一致性，隔离性，永久性，也就是ACID，这样才能保证事务中数据的正确性。</p><p>而事务的隔离性就是指：多个并发的事务同事访问一个数据库时，一个事务不应该被另一个事务所干扰，每个并发的事务都要相互隔离。</p><h3 id="如果没有事务隔离"><a href="#如果没有事务隔离" class="headerlink" title="如果没有事务隔离"></a>如果没有事务隔离</h3><p>如果没有事务隔离的话，会发生什么？</p><p>假设有表T，里边记录了几种语言的记录</p><table><thead><tr><th>ID</th><th>NAME</th></tr></thead><tbody><tr><td>1</td><td>JavaWeb</td></tr><tr><td>2</td><td>Python</td></tr><tr><td>3</td><td>Go</td></tr></tbody></table><p>（1）事务A访问数据库，向表中插入了一条记录4:C++，但是并没有提交事务</p><p>insert into T values(4,’C++’)；</p><p>这时候，来了一个事务B，要查询表中所有的记录，这是就能查到id为4的C++，这种情况叫做“脏读”</p><p>（2）事务A访问数据库，要按id查询id为1的语言的名字，执行了：</p><pre><code>select * from T where id = 1;</code></pre><p>得到了name为JavaWeb的记录。这时候事务B访问数据库，将id为1的记录的name更新为了JavaEE</p><pre><code>update T set name = 'JavaEE' where id = 1;</code></pre><p>接着事务A还想再看一次id为1的记录的name，发现已经变成了JavaEE，跟第一次的读取数据不同，这就叫做不可重复读。</p><p>（3）事务A访问数据库，想看表中的记录都有什么，于是执行了：</p><pre><code>select * from T;</code></pre><p>这时候，事务B来了，向表中插入了一条新的记录：</p><pre><code>insert into A values(5,'SQL');</code></pre><p>然后事务A想再查看一遍刚才的语言都有哪些，于是把刚才的查询语句又执行了一遍，结果第一次查询有四条，第二次查询有五条。这叫幻读。</p><h3 id="数据库隔离级别"><a href="#数据库隔离级别" class="headerlink" title="数据库隔离级别"></a>数据库隔离级别</h3><p>为了解决以上 脏读，不可重复读，幻读的问题，我们需要根据我们的实际情况来设置数据库的隔离级别：</p><ul><li>读未提交</li><li>读提交</li><li>可重复读</li><li>串行化</li></ul><p>这四种隔离级别对应着三种事务隔离问题，下面看一下具体解释：</p><h4 id="（1）读未提交"><a href="#（1）读未提交" class="headerlink" title="（1）读未提交"></a>（1）读未提交</h4><p>就是可以读到未提交的内容。因此在这种级别下，是不会加锁的，就会导致脏读的情况，当然了，也会出现不可重复读和幻读。</p><h4 id="（2）读提交"><a href="#（2）读提交" class="headerlink" title="（2）读提交"></a>（2）读提交</h4><p>就是只能读到事务已经提交的内容。这是各种系统中最常用的一种隔离级别。包括SQL Server和Oracle。这种隔离级别可以避免脏读。</p><p>这个级别也可以叫做“快照读”，这是按照原理来命名的，即：是事务中的每个 sql 语句生成一个 readView。那就是一个事务内多条 sql 语句，会生成多个 readView。而每条 sql 执行时，都是查询最新 readView 的值，从而查取到别的事务已经提交的数据。</p><p>但是读已提交只能避免脏读，而无法解决不可重复读和幻读。</p><h4 id="（3）可重复读"><a href="#（3）可重复读" class="headerlink" title="（3）可重复读"></a>（3）可重复读</h4><p>专门针对不可重复读的隔离级别，是MySQL的默认隔离级别。</p><p>在这个级别下，普通的查询依然是快照读，但是在事务启动时，就不允许修改（Update）操作了，而不可重复读正是因为两次读取之间出现了数据的修改操作，读取之后就加锁不允许其他事务修改这种操作效率也比较差，而成熟的数据库，出于性能考虑，都是使用了以乐观锁为理论基础的<strong>MVCC（多版本并发控制）</strong>来实现。</p><p>此级别不可避免幻读，因为幻读是由于插入（insert）或者删除（delete）操作产生的。</p><h4 id="（4）串行化"><a href="#（4）串行化" class="headerlink" title="（4）串行化"></a>（4）串行化</h4><p>  这是数据库的最高隔离级别，在这种级别下，事务串行化的顺序执行。但是效率太差，基本不会使用。</p><p><strong>脏读：select问题</strong></p><p><strong>不可重复读：update问题</strong></p><p><strong>幻读：insert/delete问题</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+            <tag> ORACLE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>我的个人博客</title>
       <link href="2020/10/28/first/"/>
       <url>2020/10/28/first/</url>
