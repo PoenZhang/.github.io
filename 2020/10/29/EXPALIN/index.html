@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Keep learning">
+    <meta name="keywords" content="如何使用SQL的EXPLAIN指令判断和优化SQL性能？, Keep learning">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Keep learning</title>
+    <title>如何使用SQL的EXPLAIN指令判断和优化SQL性能？ | Keep learning</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -313,12 +313,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://s1.ax1x.com/2020/10/29/BGoOgS.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title"></h1>
+                    <h1 class="description center-align post-title">如何使用SQL的EXPLAIN指令判断和优化SQL性能？</h1>
                 </div>
             </div>
         </div>
@@ -433,12 +433,29 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/MySQL/">
+                                <span class="chip bg-color">MySQL</span>
+                            </a>
+                        
+                            <a href="/tags/ORACLE/">
+                                <span class="chip bg-color">ORACLE</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                数据库
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -468,7 +485,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    6 Min
+                    5 Min
                 </div>
                 
 
@@ -483,14 +500,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<p>title: 如何使用SQL的EXPLAIN指令判断和优化SQL性能？<br>date: 2020-10-29 16:01:00<br>author: PoenZhang<br>img: <a target="_blank" rel="noopener" href="https://s1.ax1x.com/2020/10/29/BGoOgS.jpg">https://s1.ax1x.com/2020/10/29/BGoOgS.jpg</a><br>top: true<br>cover: true<br>summary: SQL的EXPLAIN指令<br>categories: 数据库<br>tags:</p>
-<ul>
-<li>MySQL</li>
-<li>ORACLE</li>
-</ul>
-<hr>
-<p>工作中，我们经常会写一些很复杂的SQL，有可能是统计报表，有可能是复杂查询，当我们费尽手段把一个可以工作的SQL写出来之后，并不意味着结束了，如果这个SQL查询或者统计速度很慢，将是一个十分耗费资源的动作。即使它能工作，也有可能在执行半分钟或者更久之后能够给出结果，但执行时间越久，耗费资源就越多，越容易阻塞后续的数据库链接请求，如果这样的SQL很多，那么最终也将拖垮服务器。</p>
+                <p>工作中，我们经常会写一些很复杂的SQL，有可能是统计报表，有可能是复杂查询，当我们费尽手段把一个可以工作的SQL写出来之后，并不意味着结束了，如果这个SQL查询或者统计速度很慢，将是一个十分耗费资源的动作。即使它能工作，也有可能在执行半分钟或者更久之后能够给出结果，但执行时间越久，耗费资源就越多，越容易阻塞后续的数据库链接请求，如果这样的SQL很多，那么最终也将拖垮服务器。</p>
 <h3 id="EXPALIN指令"><a href="#EXPALIN指令" class="headerlink" title="EXPALIN指令"></a>EXPALIN指令</h3><p>SQL为什么会执行的慢？该如何判断这个SQL的查询数量级？我们可以用 “EXPLAIN”指令，解释你的SQL。</p>
 <p>EXPLAIN指令是一个优化神器，虽然它并不能直接告诉你该如何优化这个SQL，但是你可以根据它对你SQL的模拟执行得到你的SQL有没有用上索引，有没有做全表扫描，查询出结果的数量级是多少。这是一个基于开销的优化器，我们可以获得更多被优化器考虑到的访问策略的细节，以及当运行SQL语句时，哪种策略预计会被采用。</p>
 <pre><code>mysql&gt; explain select * from servers;
@@ -561,7 +571,7 @@ row in set (0.03 sec)</code></pre>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">Poen Zhang</a>
+                    <a href="/about" rel="external nofollow noreferrer">PoenZhang</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -584,7 +594,7 @@ row in set (0.03 sec)</code></pre>
                     All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     reprint polocy. If reproduced, please indicate source
-                    <a href="/about" target="_blank">Poen Zhang</a>
+                    <a href="/about" target="_blank">PoenZhang</a>
                     !
                 </span>
             </div>
@@ -608,7 +618,15 @@ row in set (0.03 sec)</code></pre>
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
+                            
+                                <a href="/tags/MySQL/">
+                                    <span class="chip bg-color">MySQL</span>
+                                </a>
+                            
+                                <a href="/tags/ORACLE/">
+                                    <span class="chip bg-color">ORACLE</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -828,16 +846,15 @@ row in set (0.03 sec)</code></pre>
                 <a href="/2020/10/29/EXPALIN/">
                     <div class="card-image">
                         
+                        <img src="https://s1.ax1x.com/2020/10/29/BGoOgS.jpg" class="responsive-img" alt="如何使用SQL的EXPLAIN指令判断和优化SQL性能？">
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
-                        
-                        <span class="card-title"></span>
+                        <span class="card-title">如何使用SQL的EXPLAIN指令判断和优化SQL性能？</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            SQL的EXPLAIN指令
                         
                     </div>
                     <div class="publish-info">
@@ -846,13 +863,29 @@ row in set (0.03 sec)</code></pre>
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Poen Zhang
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                    数据库
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
+                    </a>
+                    
+                    <a href="/tags/ORACLE/">
+                        <span class="chip bg-color">ORACLE</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -1109,7 +1142,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">3.7k</span>&nbsp;字
+                class="white-color">3.6k</span>&nbsp;字
             
             
             

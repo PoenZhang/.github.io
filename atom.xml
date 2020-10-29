@@ -6,7 +6,7 @@
   <link href="https://poenzhang.github.io/atom.xml" rel="self"/>
   
   <link href="https://poenzhang.github.io/"/>
-  <updated>2020-10-29T08:15:58.672Z</updated>
+  <updated>2020-10-29T08:25:03.964Z</updated>
   <id>https://poenzhang.github.io/</id>
   
   <author>
@@ -17,24 +17,29 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
+    <title>如何使用SQL的EXPLAIN指令判断和优化SQL性能？</title>
     <link href="https://poenzhang.github.io/2020/10/29/EXPALIN/"/>
     <id>https://poenzhang.github.io/2020/10/29/EXPALIN/</id>
-    <published>2020-10-29T08:15:58.672Z</published>
-    <updated>2020-10-29T08:15:58.672Z</updated>
+    <published>2020-10-29T08:01:00.000Z</published>
+    <updated>2020-10-29T08:25:03.964Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;hr&gt;
-&lt;p&gt;title: 如何使用SQL的EXPLAIN指令判断和优化SQL性能？&lt;br&gt;date: 2020-10-29 16:01:00&lt;br&gt;author: PoenZhang&lt;br&gt;img: &lt;a</summary>
+    <summary type="html">&lt;p&gt;工作中，我们经常会写一些很复杂的SQL，有可能是统计报表，有可能是复杂查询，当我们费尽手段把一个可以工作的SQL写出来之后，并不意味着结束了，如果这个SQL查询或者统计速度很慢，将是一个十分耗费资源的动作。即使它能工作，也有可能在执行半分钟或者更久之后能够给出结果，但执行时</summary>
         
       
     
     
     
+    <category term="数据库" scheme="https://poenzhang.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+    <category term="MySQL" scheme="https://poenzhang.github.io/tags/MySQL/"/>
+    
+    <category term="ORACLE" scheme="https://poenzhang.github.io/tags/ORACLE/"/>
     
   </entry>
   
