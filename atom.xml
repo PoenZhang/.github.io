@@ -6,7 +6,7 @@
   <link href="https://poenzhang.github.io/atom.xml" rel="self"/>
   
   <link href="https://poenzhang.github.io/"/>
-  <updated>2020-10-30T05:27:42.527Z</updated>
+  <updated>2020-10-30T08:51:25.868Z</updated>
   <id>https://poenzhang.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java Thread 简析</title>
+    <link href="https://poenzhang.github.io/2020/10/30/Java_Thread/"/>
+    <id>https://poenzhang.github.io/2020/10/30/Java_Thread/</id>
+    <published>2020-10-30T08:48:00.000Z</published>
+    <updated>2020-10-30T08:51:25.868Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;1-Thread代表什么？&quot;&gt;&lt;a href=&quot;#1-Thread代表什么？&quot; class=&quot;headerlink&quot; title=&quot;1.Thread代表什么？&quot;&gt;&lt;/a&gt;1.Thread代表什么？&lt;/h2&gt;&lt;p&gt;Q: “Java 创建线程的几种方式” A:</summary>
+        
+      
+    
+    
+    
+    <category term="编码与设计" scheme="https://poenzhang.github.io/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+    <category term="java" scheme="https://poenzhang.github.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>Java Timer类简析</title>

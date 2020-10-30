@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="数据库事务隔离级别, Keep learning">
+    <meta name="keywords" content="Java Thread 简析, Keep learning">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>数据库事务隔离级别 | Keep learning</title>
+    <title>Java Thread 简析 | Keep learning</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -313,12 +313,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://s1.ax1x.com/2020/10/29/BGo4nH.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">数据库事务隔离级别</h1>
+                    <h1 class="description center-align post-title">Java Thread 简析</h1>
                 </div>
             </div>
         </div>
@@ -435,12 +435,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/MySQL/">
-                                <span class="chip bg-color">MySQL</span>
-                            </a>
-                        
-                            <a href="/tags/ORACLE/">
-                                <span class="chip bg-color">ORACLE</span>
+                            <a href="/tags/java/">
+                                <span class="chip bg-color">java</span>
                             </a>
                         
                     </div>
@@ -451,8 +447,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
-                                数据库
+                            <a href="/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                编码与设计
                             </a>
                         
                     </div>
@@ -464,28 +460,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-10-29
+                    2020-10-30
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2020-10-29
+                    2020-10-30
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    3 Min
+                    4 Min
                 </div>
                 
 
@@ -500,62 +496,190 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="什么是事务隔离？"><a href="#什么是事务隔离？" class="headerlink" title="什么是事务隔离？"></a>什么是事务隔离？</h3><p>任何支持事务的数据库，都必须具备四个特性：原子性，一致性，隔离性，永久性，也就是ACID，这样才能保证事务中数据的正确性。</p>
-<p>而事务的隔离性就是指：多个并发的事务同事访问一个数据库时，一个事务不应该被另一个事务所干扰，每个并发的事务都要相互隔离。</p>
-<h3 id="如果没有事务隔离"><a href="#如果没有事务隔离" class="headerlink" title="如果没有事务隔离"></a>如果没有事务隔离</h3><p>如果没有事务隔离的话，会发生什么？</p>
-<p>假设有表T，里边记录了几种语言的记录</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>NAME</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>JavaWeb</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Python</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Go</td>
-</tr>
-</tbody></table>
-<p>（1）事务A访问数据库，向表中插入了一条记录4:C++，但是并没有提交事务</p>
-<p>insert into T values(4,’C++’)；</p>
-<p>这时候，来了一个事务B，要查询表中所有的记录，这是就能查到id为4的C++，这种情况叫做“脏读”</p>
-<p>（2）事务A访问数据库，要按id查询id为1的语言的名字，执行了：</p>
-<pre><code>select * from T where id = 1;</code></pre>
-<p>得到了name为JavaWeb的记录。这时候事务B访问数据库，将id为1的记录的name更新为了JavaEE</p>
-<pre><code>update T set name = 'JavaEE' where id = 1;</code></pre>
-<p>接着事务A还想再看一次id为1的记录的name，发现已经变成了JavaEE，跟第一次的读取数据不同，这就叫做不可重复读。</p>
-<p>（3）事务A访问数据库，想看表中的记录都有什么，于是执行了：</p>
-<pre><code>select * from T;</code></pre>
-<p>这时候，事务B来了，向表中插入了一条新的记录：</p>
-<pre><code>insert into A values(5,'SQL');</code></pre>
-<p>然后事务A想再查看一遍刚才的语言都有哪些，于是把刚才的查询语句又执行了一遍，结果第一次查询有四条，第二次查询有五条。这叫幻读。</p>
-<h3 id="数据库隔离级别"><a href="#数据库隔离级别" class="headerlink" title="数据库隔离级别"></a>数据库隔离级别</h3><p>为了解决以上 脏读，不可重复读，幻读的问题，我们需要根据我们的实际情况来设置数据库的隔离级别：</p>
+                <h2 id="1-Thread代表什么？"><a href="#1-Thread代表什么？" class="headerlink" title="1.Thread代表什么？"></a>1.Thread代表什么？</h2><p>Q: “Java 创建线程的几种方式” A: “实现Runnable、Callable。线程池、继承Thread” are you ok ?。</p>
+<p>通过深入理解JVM这本书，我们知道Java线程模型是一一对应模型，即一个Java线程对应操作系统一个轻量级进程。也就是说，正常new Thread().start()这个动作，会让操作系统中多出一个轻量级进程。所以，应该是new Thread().start() 对应一个线程实体才对，和Runnable、Callable有啥关系？。</p>
+<p>这篇文章是我想表达的😂  <a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2016-03/128997.htm">https://www.linuxidc.com/Linux/2016-03/128997.htm</a></p>
+<pre><code>/**
+* Runnable、Callable应该算是约定的任务接口,因为Thread中是执行的Runnable target的run的,
+* 实际线程的创建只有new Thread().start0()
+* Thread对象在未调用本地方法start0()之前应该是没有在操作系统中创建对应的轻量级进程的
+* #这只是我在当前水平下的自我理解,水平有限，见谅。
+*/
+public class Thread implements Runnable{
+    /* What will be run. */
+    private Runnable target;
+
+    @Override
+    public void run() {
+        if (target != null) {
+            target.run();
+        }
+    }
+    ........
+}</code></pre>
+<h2 id="2-Thread-状态变化"><a href="#2-Thread-状态变化" class="headerlink" title="2.Thread 状态变化"></a>2.Thread 状态变化</h2><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/BtcVXR"><img src="https://s1.ax1x.com/2020/10/30/BtcVXR.png" alt="BtcVXR.png"></a></p>
+<p>线程状态图</p>
 <ul>
-<li>读未提交</li>
-<li>读提交</li>
-<li>可重复读</li>
-<li>串行化</li>
+<li><p>new Thread() <em>NEW</em>状态 此时只是堆区中多了一个Thread对象，操作系统并没有相应的进程创建</p>
+</li>
+<li><p>thread.start() <em>RUNNABLE</em>状态 操作系统中创建了相应进程，等待cpu调度</p>
+</li>
+<li><p>Running状态  cpu调度执行阶段,即回调执行Thread.run()方法的状态</p>
+</li>
+<li><ul>
+<li>run方法执行完成  -&gt; 则线程正常退出TERMINATED状态</li>
+<li>run方法中执行以下</li>
 </ul>
-<p>这四种隔离级别对应着三种事务隔离问题，下面看一下具体解释：</p>
-<h4 id="（1）读未提交"><a href="#（1）读未提交" class="headerlink" title="（1）读未提交"></a>（1）读未提交</h4><p>就是可以读到未提交的内容。因此在这种级别下，是不会加锁的，就会导致脏读的情况，当然了，也会出现不可重复读和幻读。</p>
-<h4 id="（2）读提交"><a href="#（2）读提交" class="headerlink" title="（2）读提交"></a>（2）读提交</h4><p>就是只能读到事务已经提交的内容。这是各种系统中最常用的一种隔离级别。包括SQL Server和Oracle。这种隔离级别可以避免脏读。</p>
-<p>这个级别也可以叫做“快照读”，这是按照原理来命名的，即：是事务中的每个 sql 语句生成一个 readView。那就是一个事务内多条 sql 语句，会生成多个 readView。而每条 sql 执行时，都是查询最新 readView 的值，从而查取到别的事务已经提交的数据。</p>
-<p>但是读已提交只能避免脏读，而无法解决不可重复读和幻读。</p>
-<h4 id="（3）可重复读"><a href="#（3）可重复读" class="headerlink" title="（3）可重复读"></a>（3）可重复读</h4><p>专门针对不可重复读的隔离级别，是MySQL的默认隔离级别。</p>
-<p>在这个级别下，普通的查询依然是快照读，但是在事务启动时，就不允许修改（Update）操作了，而不可重复读正是因为两次读取之间出现了数据的修改操作，读取之后就加锁不允许其他事务修改这种操作效率也比较差，而成熟的数据库，出于性能考虑，都是使用了以乐观锁为理论基础的<strong>MVCC（多版本并发控制）</strong>来实现。</p>
-<p>此级别不可避免幻读，因为幻读是由于插入（insert）或者删除（delete）操作产生的。</p>
-<h4 id="（4）串行化"><a href="#（4）串行化" class="headerlink" title="（4）串行化"></a>（4）串行化</h4><p>  这是数据库的最高隔离级别，在这种级别下，事务串行化的顺序执行。但是效率太差，基本不会使用。</p>
-<p><strong>脏读：select问题</strong></p>
-<p><strong>不可重复读：update问题</strong></p>
-<p><strong>幻读：insert/delete问题</strong></p>
+</li>
+<li><ul>
+<li><ul>
+<li><em>sleep(long)</em></li>
+<li><em>Object#wait(long)</em>  <em>和对应Object#notify() 方法都必须在synchronized (obj){} 同步区域中才能使用</em></li>
+<li><em>Thread#join(long)</em></li>
+<li><em>LockSupport#parkNanos</em></li>
+<li><em>LockSupport#parkUntil</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>​    进入<em>TIMED_WAITING**状态。让当前线程停止一段时间,时间点到则恢复执行 -&gt;</em> <em>RUNNABLE**状态</em></p>
+<ul>
+<li><ul>
+<li><em>run方法执行以下方法</em></li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><em>object#wait()  理解: 释放当前线程持有的object对象锁,并将当前线程移动到object的waitting队列中,</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>此状态的线程需要<strong>Object#notify()｜</strong>Object#notifyAll() 来显示将线程从相应对象的waiting队列移除。</em></p>
+<ul>
+<li><ul>
+<li><ul>
+<li><em>thread.join()  理解: 底层也是wait方法,所以也需要唤醒,只不过这个唤醒是jvm来做的。当thread类执行完成以后,会**notifyAll()**一次，唤醒wait在thred对象上的线程。</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>参考资料 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fc51be7e5bc0">https://www.jianshu.com/p/fc51be7e5bc0</a></p>
+<ul>
+<li><ul>
+<li><ul>
+<li><em>LockSupport#park()  需要对应的**LockSupport#unpark(Thread)解除</em> <em>WAITING**状态</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>线程进入<strong>WAITING</strong>状态。</em></p>
+<ul>
+<li><ul>
+<li><em>run方法执行</em></li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li><em>Thread.<strong>yield</strong>()  让出cpu</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>线程重回**RUNNABLE状态，等待cpu调度</em></p>
+<ul>
+<li><em>BLOCKED</em>状态:线程处于锁对象的<em>sync</em>队列中的状态。</li>
+</ul>
+<p>再看下所谓的对象的<em>waiting</em>队列和<em>sync</em>队列。这块涉及到<em>synchronized</em> 锁关键字的解析，此处不做细致解析，简单介绍一下在<em>synchronized</em> 同步块中调用<em>object#wait() 和</em> <em>o**bject#notify()</em> 的线程变化</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/BtcEc9"><img src="https://s1.ax1x.com/2020/10/30/BtcEc9.png" alt="BtcEc9.png"></a></p>
+<p>图片来源:<a target="_blank" rel="noopener" href="https://blog.csdn.net/pange1991/article/details/53860651">https://blog.csdn.net/pange1991/article/details/53860651</a></p>
+<pre><code>/**
+* 目的:t1线程wait在lock对象上,让t2来notify t1线程
+* 问题:如何保证t1和t2执行的有序性。【不用juc包实现】
+* 在t2中使用t1.join是有问题。
+*/
+public class ThreadTest {
+    private static Object lock = new Object();
+    private static volatile boolean flag = false;
+    private static CountDownLatch countDownLatch = new CountDownLatch(1);
+    private static Semaphore semaphore = new Semaphore(0);
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock){
+                    System.out.println(Thread.currentThread().getName() + " waiting");
+                    try {
+                        flag = true;
+//                        countDownLatch.countDown();
+//                        semaphore.release();
+                        lock.wait(); //当thread被notify,重新获取锁后,从此处继续执行
+                        System.out.println("after waiting");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("after sync");
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //t1.join()问题！join的notify动作在t1线程退出时才会触发,而
+                    //t1线程的退出又依赖于t2的notify。所以此处会陷入死锁
+                    while (true) {
+                        if(!flag){
+                          continue;
+                        }
+//                        countDownLatch.await();
+//                        semaphore.acquire();
+                        synchronized (lock) {
+                            System.out.println(Thread.currentThread().getName() + "notify");
+                            lock.notify();
+
+                            System.out.println(Thread.currentThread().getName() + " 等10s再释放锁");
+                            Thread.sleep(10000);
+                        }
+                        break;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        //t2先开始,会有什么问题，需要怎么解决？或者说如何保证t1在t2之前执行?
+        t2.start();
+        t1.start();
+    }
+}</code></pre>
+<h2 id="3-Thread常用api及实现原理"><a href="#3-Thread常用api及实现原理" class="headerlink" title="3.Thread常用api及实现原理"></a>3.Thread常用api及实现原理</h2><ul>
+<li><p><strong><em>thread.interrupt() 中断线程，即设置thread引用的线程中断位为true</em></strong></p>
+</li>
+<li><p><strong><em>thread.isInterrupted(boolean) 仅返回****线程的中断状态,且是否清除中断位</em></strong></p>
+</li>
+<li><ul>
+<li><strong><em>boolean=true 即thread.interrupted() 清除**<strong><strong>当前执行**</strong></strong>线程中断位,并返回清除之前线程的中断状态</em></strong></li>
+<li><strong><em>boolean=false 即****thread.isInterrupted() 返回thread线程是否中断</em></strong></li>
+</ul>
+</li>
+<li><p><strong><em>thread.isAlive()  thread是否处于 start后未终止退出状态</em></strong></p>
+</li>
+<li><p><strong><em>thread.join(long) 当前执行线程wait在thread上，等待notify。thread的notify发生在run执行完成退出时。</em></strong></p>
+</li>
+</ul>
+<p><strong><em>参考：</em></strong><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fc51be7e5bc0">https://www.jianshu.com/p/fc51be7e5bc0</a></p>
+<ul>
+<li><strong><em>thread.setContextClassLoader(ClassLoader) 设置线程上下文类加载器，打破双亲委派模型的方法之一\</em></strong></li>
+</ul>
+<hr>
+<hr>
 
             </div>
             <hr/>
@@ -571,7 +695,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">PoenZhang</a>
+                    <a href="/about" rel="external nofollow noreferrer">志豪</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -581,7 +705,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://poenzhang.github.io/2020/10/29/data_transaction/">https://poenzhang.github.io/2020/10/29/data_transaction/</a>
+                    <a href="https://poenzhang.github.io/2020/10/30/Java_Thread/">https://poenzhang.github.io/2020/10/30/Java_Thread/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -594,7 +718,7 @@
                     All articles in this blog are used except for special statements
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     reprint polocy. If reproduced, please indicate source
-                    <a href="/about" target="_blank">PoenZhang</a>
+                    <a href="/about" target="_blank">志豪</a>
                     !
                 </span>
             </div>
@@ -619,12 +743,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/MySQL/">
-                                    <span class="chip bg-color">MySQL</span>
-                                </a>
-                            
-                                <a href="/tags/ORACLE/">
-                                    <span class="chip bg-color">ORACLE</span>
+                                <a href="/tags/java/">
+                                    <span class="chip bg-color">java</span>
                                 </a>
                             
                         </div>
@@ -838,49 +958,47 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2020/10/29/EXPALIN/">
+                <a href="/2020/10/30/Java_Thread/">
                     <div class="card-image">
                         
-                        <img src="https://s1.ax1x.com/2020/10/29/BGoOgS.jpg" class="responsive-img" alt="如何使用SQL的EXPLAIN指令判断和优化SQL性能？">
+                        <img src="https://s1.ax1x.com/2020/10/29/BGo4nH.jpg" class="responsive-img" alt="Java Thread 简析">
                         
-                        <span class="card-title">如何使用SQL的EXPLAIN指令判断和优化SQL性能？</span>
+                        <span class="card-title">Java Thread 简析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            SQL的EXPLAIN指令
+                            Java Thread 简析
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-10-29
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-30
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
-                                    数据库
+                            <a href="/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                    编码与设计
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/MySQL/">
-                        <span class="chip bg-color">MySQL</span>
-                    </a>
-                    
-                    <a href="/tags/ORACLE/">
-                        <span class="chip bg-color">ORACLE</span>
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
                     </a>
                     
                 </div>
@@ -894,29 +1012,33 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/10/28/first/">
+                <a href="/2020/10/30/Java_Timer/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="我的个人博客">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Java Timer类简析">
                         
-                        <span class="card-title">我的个人博客</span>
+                        <span class="card-title">Java Timer类简析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            欢迎大家来到我的个人博客，让我们一起学习一起进步。
+                            Java Timer类简析
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-30
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Poen Zhang
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                    编码与设计
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -924,8 +1046,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/keep-learning/">
-                        <span class="chip bg-color">keep learning</span>
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
                     </a>
                     
                 </div>
