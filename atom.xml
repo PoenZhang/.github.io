@@ -6,7 +6,7 @@
   <link href="https://poenzhang.github.io/atom.xml" rel="self"/>
   
   <link href="https://poenzhang.github.io/"/>
-  <updated>2020-10-29T08:25:03.964Z</updated>
+  <updated>2020-10-30T02:23:37.262Z</updated>
   <id>https://poenzhang.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>23种设计模式（1）-创建型模式</title>
+    <link href="https://poenzhang.github.io/2020/10/30/design_pattern/"/>
+    <id>https://poenzhang.github.io/2020/10/30/design_pattern/</id>
+    <published>2020-10-30T02:22:00.000Z</published>
+    <updated>2020-10-30T02:23:37.262Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;1、单例模式&quot;&gt;&lt;a href=&quot;#1、单例模式&quot; class=&quot;headerlink&quot; title=&quot;1、单例模式&quot;&gt;&lt;/a&gt;1、单例模式&lt;/h2&gt;&lt;h2 id=&quot;（1）为什么要使用单例？&quot;&gt;&lt;a href=&quot;#（1）为什么要使用单例？&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="编码与设计" scheme="https://poenzhang.github.io/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+    <category term="设计模式" scheme="https://poenzhang.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>如何使用SQL的EXPLAIN指令判断和优化SQL性能？</title>
