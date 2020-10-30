@@ -6,7 +6,7 @@
   <link href="https://poenzhang.github.io/atom.xml" rel="self"/>
   
   <link href="https://poenzhang.github.io/"/>
-  <updated>2020-10-30T02:23:37.262Z</updated>
+  <updated>2020-10-30T03:36:41.104Z</updated>
   <id>https://poenzhang.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java Timer类简析</title>
+    <link href="https://poenzhang.github.io/2020/10/30/Java_Timer/"/>
+    <id>https://poenzhang.github.io/2020/10/30/Java_Timer/</id>
+    <published>2020-10-30T03:34:00.000Z</published>
+    <updated>2020-10-30T03:36:41.104Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;&lt;h4 id=&quot;1-功能简介&quot;&gt;&lt;a href=&quot;#1-功能简介&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="编码与设计" scheme="https://poenzhang.github.io/categories/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+    <category term="java" scheme="https://poenzhang.github.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>23种设计模式（1）-创建型模式</title>
