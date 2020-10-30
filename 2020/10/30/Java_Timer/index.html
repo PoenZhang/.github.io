@@ -507,8 +507,8 @@
 </ul>
 </li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2020/png/1632949/1604024914067-7249c7c5-cb3f-4602-8a62-4e2f5ff565c2.png" alt="img"></p>
-<h4 id="2-使用方式"><a href="#2-使用方式" class="headerlink" title="2.使用方式"></a>2.使用方式</h4><p><img src="https://cdn.nlark.com/yuque/0/2020/png/1632949/1599028158395-a5aa0d85-dfe2-4142-bf53-1bd91049c2b3.png" alt="image.png"></p>
+<p><img src="https://s1.ax1x.com/2020/10/30/Bti228.png" alt="img"></p>
+<h4 id="2-使用方式"><a href="#2-使用方式" class="headerlink" title="2.使用方式"></a>2.使用方式</h4><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/BtiRxS"><img src="https://s1.ax1x.com/2020/10/30/BtiRxS.md.png" alt="BtiRxS.md.png"></a></p>
 <p>delay：为延迟执行时间。period为执行周期。当period为0时代表只执行一次即任务执行一次后就会从TaskQueue中移除。其他api均是对sched(TimerTask task, long time, long period) 的上层简单封装</p>
 <h4 id="3-实现原理"><a href="#3-实现原理" class="headerlink" title="3.实现原理"></a>3.实现原理</h4><p>Timer主要由 TimerThread 任务执行线程、TaskQueue 任务队列、TimerTask任务实体 三部分构成。</p>
 <p>即定时任务的基本组成。任务执行者(单一线程或线程池)，任务实体(一般需要有执行时间点和执行周期的属性,    否则谁知道啥时候你需要执行了)，任务队列(有序!)。</p>
